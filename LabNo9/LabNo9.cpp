@@ -10,11 +10,11 @@ using namespace std;
 struct Student {
     char Name[100];
     char Group[100];
-    int Ochenka;
+    int Ochenka[3];
 };
 
-float srball(Student a) {
-    return (float) a.Ochenka / 3;
+float srball(const Student& a) {
+    return (float) (a.Ochenka[0]+ a.Ochenka[1]+ a.Ochenka[2] )/ 3;
 }
 
 int main()
@@ -25,7 +25,6 @@ int main()
     Student A[100];
     char d[100];
     int n;
-    //a 1 2 b 1 8 c 2 3 d 2 7
     cout << "Введите количество студентво: ";
     cin >> n;
     if (n >= 1) {
@@ -36,7 +35,9 @@ int main()
             cout << "Введите группу студента: ";
             cin.getline(A[i].Group, 100);
             cout << "Введите оценку студента: ";
-            cin >> A[i].Ochenka;
+            for (int j = 0; j < 3; j++) {
+                cin >> A[i].Ochenka[j];
+            }
 
             cin.getline(d, 100);
         }
@@ -50,13 +51,15 @@ int main()
                 }
             }
         }
+        cout << endl;
         for (int i = 0; i < n; i++) {
-            cout << "ФИО: " << A[i].Name << " Группа: " << A[i].Group << " Оценка по 3 предметам: " << A[i].Ochenka << endl;
+            cout << "ФИО: " << A[i].Name << " Группа: " << A[i].Group << " Средняя оценка по 3 предметам: " << srball(A[i]) << endl;
         }
+
         char* group[100];
         char t[100];
         strcpy(t, A[0].Group);
-        group[0] = (&A[0])->Group;
+        group[0] = A[0].Group;
         int ik = 1;
         for (int i = 1; i < n; i++) {
             if (!(strcmp(t, A[i].Group) == 0)) {
@@ -69,7 +72,7 @@ int main()
                     }
                 }
                 if (!Flag) {
-                    group[ik] = (&A[i])->Group;
+                    group[ik] = A[i].Group;
                     ik++;
                 }
             }
@@ -81,14 +84,14 @@ int main()
             int yn = 0;
             for (int j = 0; j < n; j++) {
                 if (strcmp(group[i], A[j].Group) == 0) {
-                    s += A[j].Ochenka;
-                    yn++;
+                    s += A[j].Ochenka[0]+ A[j].Ochenka[1] + A[j].Ochenka[2];
+                    yn += 3;
                 }
             }
             float srt = (float)s / yn;
             for (int j = 0; j < n; j++) {
                 if (strcmp(group[i], A[j].Group) == 0) {
-                    if (srball(A[j]) < srt) {
+                    if (srball(A[j]) <= srt) {
                         sth[ikp] = j;
                         ikp++;
                         break;
@@ -108,7 +111,7 @@ int main()
         }
         cout << endl;
         for (int i = 0; i < ikp; i++) {
-            cout << "ФИО: " << A[sth[i]].Name << " Группа: " << A[sth[i]].Group << " Оценка по 3 предметам: " << A[sth[i]].Ochenka << endl;
+            cout << "ФИО: " << A[sth[i]].Name << " Группа: " << A[sth[i]].Group << " Средняя оценка по 3 предметам: " << srball(A[sth[i]]) << endl;
         }
     }
     return 0;
